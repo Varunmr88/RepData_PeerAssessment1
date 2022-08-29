@@ -7,6 +7,35 @@ output:
 
 
 ## Loading and preprocessing the data
+#file download and unzip in the working directory
+``` {r}
+temp <- tempfile()
+download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip",temp)
+unzip(temp)
+unlink(temp)
+df1<-read.csv("activity.csv")
+```
+  
+  
+library(readr)
+library(dplyr)
+sumtable<- df1 %>% group_by(date)%>%
+                  filter(!is.na(steps))%>% 
+                  summarise(SUM=sum(steps))
+hist(sumtable$SUM)
+st1<-summary(sumtable)
+st1
+st3<-df1 %>% group_by(interval)%>%
+  filter(!is.na(steps))%>% 
+  summarise(SUM=mean(steps))
+plot(st3,type="l")
+tail(st3)
+st3%>% top_n(1,SUM)
+install.packages("mice")
+library(mice)
+NA<-c(is.na(df1$steps))
+summary(NA)
+summary(df1)
 
 
 
